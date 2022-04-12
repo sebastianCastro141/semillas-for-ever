@@ -9,9 +9,15 @@ class SemillasTest : DescribeSpec ({
     // hay una clase Planta que tiene por atributos
     // anioSemilla, altura
     describe("Creación de las plantas") {
+        /*si tenemos una quinoa que ocupa 0.2 m2 y su semilla de origen es
+        de 2010, se trata de una planta que da semillas.
+        si tenemos una planta que ocupa 0.9 m2 pero cuya semilla de origen es de 2006,
+        también da semillas.*/
         val menta = Menta(1.0, 2021)
         val mentita = Menta(0.3, 2021)
         val soja = Soja(0.6, 2009)
+        val quinoaEsFuerte = Quinoa(1.0, 2010, 0.2)
+        val quinoaAnioDeObtencion = Quinoa(1.0, 2006, 0.9)
 
         it("probamos los atributos altura  y anioSemilla") {
             menta.altura.shouldBe(1.0)
@@ -22,6 +28,8 @@ class SemillasTest : DescribeSpec ({
             menta.daSemillas().shouldBeTrue()
             mentita.daSemillas().shouldBeFalse()
             soja.daSemillas().shouldBeFalse()
+            quinoaEsFuerte.daSemillas().shouldBeTrue()
+            quinoaAnioDeObtencion.daSemillas().shouldBeTrue()
         }
 
         it("es fuerte") {

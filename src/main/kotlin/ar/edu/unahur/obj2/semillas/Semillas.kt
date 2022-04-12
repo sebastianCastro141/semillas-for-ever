@@ -1,8 +1,9 @@
 package ar.edu.unahur.obj2.semillas
 
 abstract class Planta(var altura: Double, val anioSemilla: Int) {
-    open fun horasDeSolQueTolera() = 7
-    fun esFuerte() = horasDeSolQueTolera()>9
+    object Constantes{val UMBRAL_DE_HORAS = 7}
+    open fun horasDeSolQueTolera() = Constantes.UMBRAL_DE_HORAS
+    open fun esFuerte() = horasDeSolQueTolera()>9
     open fun daSemillas() = this.esFuerte()
     abstract fun espacio(): Double
 }
@@ -26,6 +27,20 @@ class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
     override fun daSemillas() = super.esFuerte() or (this.semillaPosteriorA2007() && (altura>0.75 && altura<0.9))
     fun semillaPosteriorA2007() = this.anioSemilla > 2007
 }
+class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : Planta(altura, anioSemilla){
+
+    override fun espacio() = espacioQueOcupa
+    override fun horasDeSolQueTolera(): Int {
+        if (this.espacio() < 0.3){
+            return 10
+        }
+        return Constantes.UMBRAL_DE_HORAS
+    }
+
+    override fun daSemillas() = super.daSemillas() or (this.anioSemilla in 2001..2008)
+
+}
+
 
 
 

@@ -49,6 +49,32 @@ class Peperina(altura: Double, anioSemilla: Int): Menta(altura, anioSemilla)
     override fun espacio() = super.espacio()*2
 }
 
+class Parcela(var ancho: Double,var largo: Double,var horaDeSolPorDia: Int , val plantas: MutableList<Planta>) {
+
+    fun superficie() = ancho*largo
+    fun cantidadMaximaDePlantas(): Int {
+        var cantidadMaxima = this.superficie() / 3 + largo
+
+        if (ancho>largo) {
+            cantidadMaxima = this.superficie()/5
+        }
+        return cantidadMaxima.toInt()
+    }
+    fun tieneComplicaciones() = plantas.any {  it.horasDeSolQueTolera() < this.horaDeSolPorDia }
+    fun plantarUnaPlanta(planta: Planta) {
+
+        if (this.alcanzoCantidadMaxima()) {
+            throw Exception("Ya no hay lugar en esta parcela")
+        } else {
+            plantas.add(planta)
+        }
+    }
+    fun cantidadPlantas() = plantas.size
+    fun espacioDisponible() = this.cantidadMaximaDePlantas() - this.cantidadPlantas()
+    fun alcanzoCantidadMaxima() = espacioDisponible() == 0
+}
+
+
 
 
 

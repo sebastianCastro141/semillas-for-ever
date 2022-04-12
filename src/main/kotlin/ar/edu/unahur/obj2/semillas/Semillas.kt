@@ -8,13 +8,13 @@ abstract class Planta(var altura: Double, val anioSemilla: Int) {
     abstract fun espacio(): Double
 }
 
-class Menta(altura: Double,  anioSemilla: Int) : Planta(altura, anioSemilla)
+open class Menta(altura: Double,  anioSemilla: Int) : Planta(altura, anioSemilla)
 {
     override fun daSemillas() =  super.daSemillas() || altura > 0.4
     override fun espacio() = altura + 1.0
 }
 
-class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
+open class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
 {
     override fun horasDeSolQueTolera(): Int  {
         return  when {
@@ -39,6 +39,14 @@ class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : P
 
     override fun daSemillas() = super.daSemillas() or (this.anioSemilla in 2001..2008)
 
+}
+class SojaTransgenica(altura: Double, anioSemilla: Int): Soja(altura, anioSemilla)
+{
+    override fun daSemillas() = false
+}
+class Peperina(altura: Double, anioSemilla: Int): Menta(altura, anioSemilla)
+{
+    override fun espacio() = super.espacio()*2
 }
 
 

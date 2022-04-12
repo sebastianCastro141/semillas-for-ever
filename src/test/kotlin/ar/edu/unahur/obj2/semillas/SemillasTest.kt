@@ -18,6 +18,8 @@ class SemillasTest : DescribeSpec ({
         val soja = Soja(0.6, 2009)
         val quinoaEsFuerte = Quinoa(1.0, 2010, 0.2)
         val quinoaAnioDeObtencion = Quinoa(1.0, 2006, 0.9)
+        val sojaTransgenica = SojaTransgenica(0.6, 2009)
+        val peperina = Peperina(0.3, 2021)
 
         it("probamos los atributos altura  y anioSemilla") {
             menta.altura.shouldBe(1.0)
@@ -30,17 +32,23 @@ class SemillasTest : DescribeSpec ({
             soja.daSemillas().shouldBeFalse()
             quinoaEsFuerte.daSemillas().shouldBeTrue()
             quinoaAnioDeObtencion.daSemillas().shouldBeTrue()
+            sojaTransgenica.daSemillas().shouldBeFalse()
         }
 
         it("es fuerte") {
             menta.esFuerte().shouldBeFalse()
             soja.esFuerte().shouldBeFalse()
+            quinoaEsFuerte.esFuerte().shouldBeTrue()
+            quinoaAnioDeObtencion.esFuerte().shouldBeFalse()
+            sojaTransgenica.esFuerte().shouldBeFalse()
         }
 
         it("espacio") {
             menta.espacio().shouldBe(2.0)
             mentita.espacio().shouldBe(1.3)
             soja.espacio().shouldBe(0.3)
+            peperina.espacio().shouldBe(2.6)
+            sojaTransgenica.espacio().shouldBe(0.3)
         }
 
         it("verifico la suma de varias") {

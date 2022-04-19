@@ -16,12 +16,15 @@ class NuevaSemillasTest : DescribeSpec
             val sojaAltaFuerte = Soja(1.1,2009)
             val sojaFuerte = Soja(0.8, 2009)
             val sojaNoCumple = Soja(0.5, 1999)
+            val sojaGigante = Soja(1.8, 2000)
             val quinoaEsFuerte = Quinoa(1.0, 2010, 0.2)
             val quinoaAnioDeObtencion = Quinoa(1.0, 2006, 0.9)
             val quinoaNoEsFuerte = Quinoa(0.8, 1900, 0.5)
             val sojaTransgenica = SojaTransgenica(0.6, 2009)
             val sojaTransgenicaSoporta12Hs = SojaTransgenica(1.2, 2009)
             val peperina = Peperina(0.3, 2021)
+
+
 
 
             describe("Probando metodos de la menta")
@@ -57,6 +60,19 @@ class NuevaSemillasTest : DescribeSpec
                     it("Espacio que ocupa la menta de menos de 0.4 de altura")
                     {
                         mentita.espacio().shouldBe(1.3)
+                    }
+                }
+                describe("Probando metodo es parcela ideal")
+                {
+                    val parcelaConMasDe6Mts = Parcela(1.0, 7.0, 10, mutableListOf())
+                    val parcelaConMenosDe6Mts = Parcela(1.0,5.0,10, mutableListOf())
+                    it("parcela con mas de 6 metros cuadrados es ideal")
+                    {
+                        menta.esParcelaIdeal(parcelaConMasDe6Mts).shouldBeTrue()
+                    }
+                    it("parcela con menos de 6 metros cuadrados no es ideal")
+                    {
+                        menta.esParcelaIdeal(parcelaConMenosDe6Mts).shouldBeFalse()
                     }
                 }
 
@@ -100,6 +116,19 @@ class NuevaSemillasTest : DescribeSpec
                         sojaFuerte.espacio().shouldBe(0.4)
                     }
                 }
+                describe("Probando metodo es parcela ideal")
+                {
+                    val parcelaConDistintaHoraDeSol = Parcela(1.0,4.0,13, mutableListOf())
+                    val parcelaConMismaHoraDeSol = Parcela(1.0, 6.0, 8, mutableListOf())
+                    it("parcela recibe la misma horas de sol que esta soja tolera es ideal")
+                    {
+                        soja.esParcelaIdeal(parcelaConMismaHoraDeSol).shouldBeTrue()
+                    }
+                    it("parcela que no recibe la misma horas de sol que esta soja no es ideal")
+                    {
+                        soja.esParcelaIdeal(parcelaConDistintaHoraDeSol).shouldBeFalse()
+                    }
+                }
             }
             describe("Probando metodos de la quinoa")
             {
@@ -129,7 +158,7 @@ class NuevaSemillasTest : DescribeSpec
                         quinoaNoEsFuerte.daSemillas().shouldBeFalse()
                     }
                 }
-                ////////////////////////////////////////////////
+
                 describe("metodo espacio")
                 {
                     it("Espacio que ocupa la menta de mas de 0.4 de altura")
@@ -137,6 +166,19 @@ class NuevaSemillasTest : DescribeSpec
                         quinoaEsFuerte.espacio().shouldBe(0.2)
                     }
 
+                }
+                describe("Probando metodo es parcela ideal")
+                {
+                    val parcelaConPlantasDeAlturaMayor = Parcela(1.0, 7.0, 10, mutableListOf(mentita, menta,sojaGigante))
+                    val parcelaSinPlantasDeAlturaMayor = Parcela(1.0, 5.0, 10, mutableListOf(soja, menta, mentita))
+                    it("parcela sin plantas de mas de 1.5 de altura es ideal")
+                    {
+                        quinoaEsFuerte.esParcelaIdeal(parcelaSinPlantasDeAlturaMayor).shouldBeTrue()
+                    }
+                    it("parcela donde hay una planta de mas de 1.5 no es ideal")
+                    {
+                        quinoaEsFuerte.esParcelaIdeal(parcelaConPlantasDeAlturaMayor).shouldBeFalse()
+                    }
                 }
             }
             describe("Probando los metodos de la soja transgenica")
@@ -149,6 +191,19 @@ class NuevaSemillasTest : DescribeSpec
                         sojaTransgenicaSoporta12Hs.daSemillas().shouldBeFalse()
                     }
                 }
+                describe("Probando metodo es parcela ideal")
+                {
+                    val parcelaConCantidadMaxDe1 = Parcela(5.0, 1.0, 8, mutableListOf())
+                    val parcelaConCantidadMaxMayorA1 = Parcela(10.0, 2.0, 8, mutableListOf() )
+                    it("parcela con cantidad max de 1 es ideal")
+                    {
+                        sojaTransgenica.esParcelaIdeal(parcelaConCantidadMaxDe1).shouldBeTrue()
+                    }
+                    it("parcela con cantidad maxima mayor a 1 no es ideal")
+                    {
+                        sojaTransgenica.esParcelaIdeal(parcelaConCantidadMaxMayorA1).shouldBeFalse()
+                    }
+                }
             }
             describe("Probando los metodos de la peperina")
             {
@@ -157,6 +212,19 @@ class NuevaSemillasTest : DescribeSpec
                         peperina.espacio().shouldBe(2.6)
                     }
 
+                }
+                describe("Probando metodo es parcela ideal")
+                {
+                    val parcelaConMasDe6Mts = Parcela(1.0, 7.0, 10, mutableListOf())
+                    val parcelaConMenosDe6Mts = Parcela(1.0,5.0,10, mutableListOf())
+                    it("parcela con mas de 6 metros cuadrados es ideal")
+                    {
+                        peperina.esParcelaIdeal(parcelaConMasDe6Mts).shouldBeTrue()
+                    }
+                    it("parcela con menos de 6 metros cuadrados no es ideal")
+                    {
+                        peperina.esParcelaIdeal(parcelaConMenosDe6Mts).shouldBeFalse()
+                    }
                 }
             }
             describe("Probando metodos de la parcela"){

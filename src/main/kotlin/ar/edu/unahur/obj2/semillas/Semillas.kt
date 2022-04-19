@@ -12,6 +12,7 @@ open class Menta(altura: Double,  anioSemilla: Int) : Planta(altura, anioSemilla
 {
     override fun daSemillas() =  super.daSemillas() || altura > 0.4
     override fun espacio() = altura + 1.0
+    fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.superficie()>6.0
 }
 
 open class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
@@ -26,6 +27,7 @@ open class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
     override fun espacio() = altura/2
     override fun daSemillas() = super.esFuerte() or (this.semillaPosteriorA2007() && (altura>0.75 && altura<0.9))
     fun semillaPosteriorA2007() = this.anioSemilla > 2007
+    open fun esParcelaIdeal(unaParcela: Parcela) = this.horasDeSolQueTolera() == unaParcela.horaDeSolPorDia
 }
 class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : Planta(altura, anioSemilla){
 
@@ -38,11 +40,13 @@ class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : P
     }
 
     override fun daSemillas() = super.daSemillas() or (this.anioSemilla in 2001..2008)
+    fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.plantas.all { it.altura < 1.5 }
 
 }
 class SojaTransgenica(altura: Double, anioSemilla: Int): Soja(altura, anioSemilla)
 {
     override fun daSemillas() = false
+    override fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.cantidadMaximaDePlantas() == 1
 }
 class Peperina(altura: Double, anioSemilla: Int): Menta(altura, anioSemilla)
 {

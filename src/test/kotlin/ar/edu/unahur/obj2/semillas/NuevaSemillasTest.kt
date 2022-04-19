@@ -253,6 +253,68 @@ class NuevaSemillasTest : DescribeSpec
                 it("supera la cantidad maxima"){
                     shouldThrowMessage("Ya no hay lugar en esta parcela"){parcela.plantarUnaPlanta(plantaQueSuperaLaCantidadMax)}
                 }
+                describe("es parcela ecologica")
+                {
+                    val parcelaEco = Parcela(1.0, 7.0, 10, mutableListOf(sojaGigante))
+                    val parcelaConComplicaciones = Parcela(5.0, 1.0, 10, mutableListOf(menta))
+                    val parcelaNoEsIdeal = Parcela(1.0, 5.0, 10, mutableListOf())
+                    val plantaEnCuestion = Menta(0.3, 2000)
+                    val plantaQueEsIdeal = SojaTransgenica(1.1, 2000)
+                    val plantaParaLaCualNoEsIdeal = Menta(0.3, 2011)
+                    it("Es parcela ecologica por que no tiene complicaciones y es ideal para la planta"){
+                        parcelaEco.esParcelaEcologica(plantaEnCuestion).shouldBeTrue()
+                    }
+                    it ("No es ecologica por que tiene complicaciones"){
+                        parcelaConComplicaciones.esParcelaEcologica(plantaQueEsIdeal).shouldBeFalse()
+                    }
+                    it ("No es ecologica por que no es ideal ")
+                    {
+                        parcelaNoEsIdeal.esParcelaEcologica(plantaParaLaCualNoEsIdeal).shouldBeFalse()
+                    }
+
+                }
+                describe("es parcela industrial")
+                {
+                    val parcelaIndustrial = Parcela(1.0, 5.0, 10, mutableListOf(menta, soja))
+                    val parcelaConMasDeDosPlantas = Parcela(5.0, 1.0, 10, mutableListOf(mentita, sojaGigante, sojaTransgenica))
+                    val parcelaConMenosDeDosPlantas = Parcela(1.0,5.0,7,mutableListOf(quinoaNoEsFuerte))
+                    val plantaFuerte = Soja(1.2, 2000)
+                    val plantaQueNoEsFuerte = Menta(0.3, 2001)
+
+                    it("Es parcela industrial por que tiene dos plantas como maximo y la planta en cuestion es fuerte"){
+                        parcelaIndustrial.esParcelaIndustrial(plantaFuerte).shouldBeTrue()
+                    }
+                    it ("No es industrial por que tiene mas de dos plantas"){
+                        parcelaConMasDeDosPlantas.esParcelaIndustrial(plantaFuerte).shouldBeFalse()
+                    }
+                    it ("No es industrial por que la planta en cuestion no es fuerte")
+                    {
+                        parcelaConMenosDeDosPlantas.esParcelaIndustrial(plantaQueNoEsFuerte).shouldBeFalse()
+                    }
+
+                }
+                describe("Planta se asocia bien")
+                {
+                    val parcelaEco = Parcela(1.0, 7.0, 8 ,mutableListOf(sojaGigante))
+                    val parcelaIndustrial = Parcela(1.0, 5.0, 10, mutableListOf(menta, soja))
+                    val plantaEcologica = Menta(0.2, 2000)
+                    val plantaNoEcologica = Quinoa(0.5, 1999, 2.0)
+                    val plantaIndustrial = Soja(1.3, 1980)
+                    val plantaNoIndustrial = Soja(0.4, 2003 )
+                    it("planta se asocia bien en una parcela ecologica"){
+                        plantaEcologica.seAsociaBienConParcelaEco(parcelaEco).shouldBeTrue()
+                    }
+                    it("planta no se asocia en una parcela industrial"){
+                        plantaNoEcologica.seAsociaBienConParcelaEco(parcelaIndustrial).shouldBeFalse()
+                    }
+                    it("planta se asocia en una parcela industrial"){
+                        plantaIndustrial.seAsociaBienConParcelaInd(parcelaIndustrial).shouldBeTrue()
+                    }
+                    it("planta no se asocia en una parcela ecologica"){
+                        plantaNoIndustrial.seAsociaBienConParcelaInd(parcelaIndustrial).shouldBeFalse()
+                    }
+
+                }
 
 
             }

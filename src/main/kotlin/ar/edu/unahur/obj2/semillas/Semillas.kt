@@ -6,13 +6,17 @@ abstract class Planta(var altura: Double, val anioSemilla: Int) {
     open fun esFuerte() = horasDeSolQueTolera()>9
     open fun daSemillas() = this.esFuerte()
     abstract fun espacio(): Double
+    abstract fun esParcelaIdeal(unaParcela: Parcela): Boolean
+    open fun seAsociaBienConParcelaEco(unaParcela: Parcela) = !unaParcela.tieneComplicaciones() && this.esParcelaIdeal(unaParcela)
+    open fun seAsociaBienConParcelaInd(unaParcela: Parcela) = unaParcela.plantas.size <= 2 && this.esFuerte()
 }
 
 open class Menta(altura: Double,  anioSemilla: Int) : Planta(altura, anioSemilla)
 {
     override fun daSemillas() =  super.daSemillas() || altura > 0.4
     override fun espacio() = altura + 1.0
-    fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.superficie()>6.0
+    override fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.superficie()>6.0
+
 }
 
 open class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
@@ -27,7 +31,7 @@ open class Soja( altura: Double, anioSemilla: Int) : Planta(altura, anioSemilla)
     override fun espacio() = altura/2
     override fun daSemillas() = super.esFuerte() or (this.semillaPosteriorA2007() && (altura>0.75 && altura<0.9))
     fun semillaPosteriorA2007() = this.anioSemilla > 2007
-    open fun esParcelaIdeal(unaParcela: Parcela) = this.horasDeSolQueTolera() == unaParcela.horaDeSolPorDia
+    override fun esParcelaIdeal(unaParcela: Parcela) = this.horasDeSolQueTolera() == unaParcela.horaDeSolPorDia
 }
 class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : Planta(altura, anioSemilla){
 
@@ -40,7 +44,7 @@ class Quinoa (altura: Double, anioSemilla: Int, val espacioQueOcupa: Double) : P
     }
 
     override fun daSemillas() = super.daSemillas() or (this.anioSemilla in 2001..2008)
-    fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.plantas.all { it.altura < 1.5 }
+    override fun esParcelaIdeal(unaParcela: Parcela) = unaParcela.plantas.all { it.altura < 1.5 }
 
 }
 class SojaTransgenica(altura: Double, anioSemilla: Int): Soja(altura, anioSemilla)
@@ -76,6 +80,8 @@ class Parcela(var ancho: Double,var largo: Double,var horaDeSolPorDia: Int , val
     fun cantidadPlantas() = plantas.size
     fun espacioDisponible() = this.cantidadMaximaDePlantas() - this.cantidadPlantas()
     fun alcanzoCantidadMaxima() = espacioDisponible() == 0
+    fun esParcelaEcologica(unaPlanta: Planta) = !this.tieneComplicaciones() && unaPlanta.esParcelaIdeal(this)
+    fun esParcelaIndustrial(unaPlanta: Planta) = this.plantas.size<=2 && unaPlanta.esFuerte()
 }
 
 
